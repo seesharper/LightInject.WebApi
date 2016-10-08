@@ -1,4 +1,4 @@
-﻿/*****************************************************************************   
+﻿/*****************************************************************************
     The MIT License (MIT)
 
     Copyright (c) 2016 bernhard.richter@gmail.com
@@ -21,9 +21,9 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ******************************************************************************
-    LightInject.WebApi version 1.1.0
+    LightInject.WebApi version 2.0.0-RC1
     http://www.lightinject.net/
-    http://twitter.com/bernhardrichter    
+    http://twitter.com/bernhardrichter
 ******************************************************************************/
 [module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1126:PrefixCallsCorrectly", Justification = "Reviewed")]
 [module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1101:PrefixLocalCallsWithThis", Justification = "No inheritance")]
@@ -31,7 +31,7 @@
 [module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1403:FileMayOnlyContainASingleNamespace", Justification = "Extension methods must be visible")]
 [module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:FileMustHaveHeader", Justification = "Custom header.")]
 [module: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "All public members are documented.")]
-
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("DocumentationRules", "SA1649", Justification = "One source file")]
 namespace LightInject
 {
     using System.Linq;
@@ -42,7 +42,7 @@ namespace LightInject
     using LightInject.WebApi;
 
     /// <summary>
-    /// Extends the <see cref="IServiceContainer"/> interface with methods that 
+    /// Extends the <see cref="IServiceContainer"/> interface with methods that
     /// enables dependency injection in a Web API application.
     /// </summary>
     public static class WebApiContainerExtensions
@@ -54,8 +54,8 @@ namespace LightInject
         /// <param name="httpConfiguration">The <see cref="HttpConfiguration"/> that represents the configuration of this Web API application.</param>
         public static void EnableWebApi(this IServiceContainer serviceContainer, HttpConfiguration httpConfiguration)
         {
-            httpConfiguration.DependencyResolver = new LightInjectWebApiDependencyResolver(serviceContainer);
             var provider = httpConfiguration.Services.GetFilterProviders();
+            httpConfiguration.DependencyResolver = new LightInjectWebApiDependencyResolver(serviceContainer);
             httpConfiguration.Services.RemoveAll(typeof(IFilterProvider), o => true);
             httpConfiguration.Services.Add(typeof(IFilterProvider), new LightInjectWebApiFilterProvider(serviceContainer, provider));
         }
@@ -99,8 +99,8 @@ namespace LightInject.WebApi
     using System.Web.Http.Filters;
 
     /// <summary>
-    /// An <see cref="IDependencyResolver"/> adapter for the LightInject service container 
-    /// that enables <see cref="ApiController"/> instances and their dependencies to be 
+    /// An <see cref="IDependencyResolver"/> adapter for the LightInject service container
+    /// that enables <see cref="ApiController"/> instances and their dependencies to be
     /// resolved through the service container.
     /// </summary>
     public class LightInjectWebApiDependencyResolver : IDependencyResolver
@@ -110,7 +110,7 @@ namespace LightInject.WebApi
         /// <summary>
         /// Initializes a new instance of the <see cref="LightInjectWebApiDependencyResolver"/> class.
         /// </summary>
-        /// <param name="serviceContainer">The <see cref="IServiceContainer"/> instance to 
+        /// <param name="serviceContainer">The <see cref="IServiceContainer"/> instance to
         /// be used for resolving service instances.</param>
         public LightInjectWebApiDependencyResolver(IServiceContainer serviceContainer)
         {
@@ -129,7 +129,7 @@ namespace LightInject.WebApi
         /// Gets an instance of the given <paramref name="serviceType"/>.
         /// </summary>
         /// <param name="serviceType">The type of the requested service.</param>
-        /// <returns>The requested service instance if available, otherwise null.</returns>                
+        /// <returns>The requested service instance if available, otherwise null.</returns>
         public object GetService(Type serviceType)
         {
             return serviceContainer.TryGetInstance(serviceType);
@@ -139,14 +139,14 @@ namespace LightInject.WebApi
         /// Gets all instance of the given <paramref name="serviceType"/>.
         /// </summary>
         /// <param name="serviceType">The type of services to resolve.</param>
-        /// <returns>A list that contains all implementations of the <paramref name="serviceType"/>.</returns>                
+        /// <returns>A list that contains all implementations of the <paramref name="serviceType"/>.</returns>
         public IEnumerable<object> GetServices(Type serviceType)
         {
             return serviceContainer.GetAllInstances(serviceType);
         }
 
         /// <summary>
-        /// Starts a new <see cref="IDependencyScope"/> that represents 
+        /// Starts a new <see cref="IDependencyScope"/> that represents
         /// the scope for services registered with <see cref="PerScopeLifetime"/>.
         /// </summary>
         /// <returns>
@@ -181,7 +181,7 @@ namespace LightInject.WebApi
         /// Gets an instance of the given <paramref name="serviceType"/>.
         /// </summary>
         /// <param name="serviceType">The type of the requested service.</param>
-        /// <returns>The requested service instance if available, otherwise null.</returns>                
+        /// <returns>The requested service instance if available, otherwise null.</returns>
         public object GetService(Type serviceType)
         {
             return serviceContainer.TryGetInstance(serviceType);
@@ -191,7 +191,7 @@ namespace LightInject.WebApi
         /// Gets all instance of the given <paramref name="serviceType"/>.
         /// </summary>
         /// <param name="serviceType">The type of services to resolve.</param>
-        /// <returns>A list that contains all implementations of the <paramref name="serviceType"/>.</returns>                
+        /// <returns>A list that contains all implementations of the <paramref name="serviceType"/>.</returns>
         public IEnumerable<object> GetServices(Type serviceType)
         {
             return serviceContainer.GetAllInstances(serviceType);
@@ -207,10 +207,10 @@ namespace LightInject.WebApi
     }
 
     /// <summary>
-    /// A <see cref="IFilterProvider"/> that uses an <see cref="IServiceContainer"/>    
+    /// A <see cref="IFilterProvider"/> that uses an <see cref="IServiceContainer"/>
     /// to inject property dependencies into <see cref="IFilter"/> instances.
-    /// </summary>    
-    public class LightInjectWebApiFilterProvider : IFilterProvider
+    /// </summary>
+    internal class LightInjectWebApiFilterProvider : IFilterProvider
     {
         private readonly IServiceContainer serviceContainer;
         private readonly IEnumerable<IFilterProvider> filterProviders;
@@ -218,7 +218,7 @@ namespace LightInject.WebApi
         /// <summary>
         /// Initializes a new instance of the <see cref="LightInjectWebApiFilterProvider"/> class.
         /// </summary>
-        /// <param name="serviceContainer">The <see cref="IServiceContainer"/> instance 
+        /// <param name="serviceContainer">The <see cref="IServiceContainer"/> instance
         /// used to inject property dependencies.</param>
         /// <param name="filterProviders">The list of existing filter providers.</param>
         public LightInjectWebApiFilterProvider(IServiceContainer serviceContainer, IEnumerable<IFilterProvider> filterProviders)
