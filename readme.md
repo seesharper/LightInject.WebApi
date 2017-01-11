@@ -1,4 +1,7 @@
 # Web API #
+[![AppVeyor](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg?maxAge=2592000)](https://ci.appveyor.com/project/seesharper/lightinject-webapi)
+[![NuGet](https://img.shields.io/nuget/v/LightInject.WebApi.svg?maxAge=2592000)]()
+[![GitHub tag](https://img.shields.io/github/tag/seesharper/LightInject.WebApi.svg?maxAge=2592000)]()
 
 **LightInject.WebApi** provides an integration that enables dependency injection in Web API applications.
 
