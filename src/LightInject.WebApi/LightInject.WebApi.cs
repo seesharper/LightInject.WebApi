@@ -21,7 +21,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 ******************************************************************************
-    LightInject.WebApi version 2.0.0-RC1
+    LightInject.WebApi version 2.0.0
     http://www.lightinject.net/
     http://twitter.com/bernhardrichter
 ******************************************************************************/
@@ -39,7 +39,7 @@ namespace LightInject
     using System.Web.Http;
     using System.Web.Http.Controllers;
     using System.Web.Http.Filters;
-    using LightInject.WebApi;
+    using WebApi;
 
     /// <summary>
     /// Extends the <see cref="IServiceContainer"/> interface with methods that
